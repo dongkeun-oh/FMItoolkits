@@ -1,6 +1,6 @@
 [submodule "ExternalMedia"]
 	path = ExternalMedia
-	url = https://github.com/nfri-devel/ExternalMedia
+	url = https://github.com/dongkeun-oh/ExternalMedia
 	branch = nfri
 [submodule "ThermoPower"]
 	path = ThermoPower
@@ -8,3 +8,6 @@
 [submodule "OMTLMSimulator"]
 	path = OMTLMSimulator
 	url = https://github.com/dongkeun-oh/OMTLMSimulator
+[submodule "test-cppfmu/external/fmu-uuid"]
+	path = test-cppfmu/external/fmu-uuid
+	url = https://github.com/viproma/fmu-uuid
