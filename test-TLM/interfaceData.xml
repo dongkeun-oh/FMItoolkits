@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ModelData>
+<Interfaces>
+	<Interface model="loadfmu" Name="fmi" Dimensions="1" Causality="Bidirectional" Domain="Mechanical"
+		Position="1.5,0,0"
+		Angle321="0,0,0"/>
+	<Interface model="loadfmu" Name="sig" Dimensions="1" Causality="Output" Domain="Signal"
+		Position="1,0,0"
+		Angle321="0,0,0"/>
+	<Interface model="driverfmu" Name="fmi" Dimensions="1" Causality="Bidirectional" Domain="Mechanical"
+		Position="0.5,0,0"
+		Angle321="0,0,0"/>
+	<Interface model="driverfmu" Name="monitor" Dimensions="1" Causality="Input" Domain="Signal"
+		Position="0,0,0"
+		Angle321="0,0,0"/>
+</Interfaces>
+<Parameters>
+	<Parameter model="loadfmu" Name="damper1.d" DefaultValue="100"/>
+	<Parameter model="loadfmu" Name="damper1.s_nominal" DefaultValue="0.0001"/>
+	<Parameter model="loadfmu" Name="fixed1.s0" DefaultValue="3"/>
+	<Parameter model="loadfmu" Name="mass2.L" DefaultValue="1"/>
+	<Parameter model="loadfmu" Name="mass2.m" DefaultValue="0.5"/>
+	<Parameter model="loadfmu" Name="mass2.stateSelect" DefaultValue=""/>
+	<Parameter model="loadfmu" Name="fmi.debugFlg" DefaultValue="0"/>
+	<Parameter model="loadfmu" Name="fmi.interfaceName" DefaultValue="fmitlm"/>
+	<Parameter model="driverfmu" Name="Kp" DefaultValue="1000"/>
+	<Parameter model="driverfmu" Name="mass1.L" DefaultValue="1"/>
+	<Parameter model="driverfmu" Name="mass1.m" DefaultValue="0.5"/>
+	<Parameter model="driverfmu" Name="sin1.amplitude" DefaultValue="0.5"/>
+	<Parameter model="driverfmu" Name="sin1.freqHz" DefaultValue="10"/>
+	<Parameter model="driverfmu" Name="sin1.offset" DefaultValue="2"/>
+	<Parameter model="driverfmu" Name="sin1.phase" DefaultValue="0"/>
+	<Parameter model="driverfmu" Name="sin1.startTime" DefaultValue="0"/>
+	<Parameter model="driverfmu" Name="mass1.stateSelect" DefaultValue=""/>
+	<Parameter model="driverfmu" Name="fmi.debugFlg" DefaultValue="0"/>
+	<Parameter model="driverfmu" Name="fmi.interfaceName" DefaultValue="fmitlm"/>
+</Parameters>
+</ModelData>

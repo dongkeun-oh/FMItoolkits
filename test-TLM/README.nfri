@@ -1,0 +1,15 @@
+* An example project of TLM based co-simulation
+
+* ControlledMass.mo : A openmodelica model of 1-D coupled mass system, in which 
+two individual masses are linked by a TLM element (a spring + a parasitic mass).
+This system is driven by an external force controlled by a proportional signal
+to the amount of error between the postion of second mass and the control value 
+(sinusoidal wave). 
+
+
+* ControlledMassOMCs.xml : A composite model to implemenet a TLM based co-simualation
+of two separated mass systems which are indepenedant openmodelica models (Driver.mo and Load.mo)
+
+* ControlledMassFMUs.xml : The same composite model, but its co-simulation consists of 
+two FMUs (Driver.fmu and Load.fmu) which are exported by openmodelica from the abovementioned
+*.mo models

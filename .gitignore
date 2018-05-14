@@ -1,0 +1,22 @@
+#some subprojects are excluded from this repository 
+/Thermocycle-library/
+/demo-fmus
+/fmusdk2
+
+#temporary parts are neglected
+build/
+temp/
+
+#ignorable files 
+.DS_Store
+.Trashes
+._*
+*.o
+*.log
+*.simlog
+#*
+*~
+*.swp
+*.tmp
+*.bak
+

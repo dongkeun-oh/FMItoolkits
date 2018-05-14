@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- The root node is the composite-model -->
+<Model Name="ControlledMassOMCs">
+  <!-- List of connected sub-models -->
+  <SubModels>
+    <SubModel Name="driver" Position="0,0,0" Angle321="0,0,0" ModelFile="Driver.mo" StartCommand="StartTLMOpenModelica">
+      <Annotation Origin="{-66,62}" Extent="{-10,-10,10,10}" Rotation="0" Visible="true"/>
+      <InterfacePoint Causality="Bidirectional" Domain="Mechanical" Dimensions="1" Name="tlm" Position="3.83493e-12,0,0" Angle321="0,0,0"/>
+    </SubModel>
+    <SubModel Name="load" Position="0,0,0" Angle321="0,0,0" ModelFile="Load.mo" StartCommand="StartTLMOpenModelica">
+      <Annotation Origin="{-18,46}" Extent="{-10,-10,10,10}" Rotation="0" Visible="true"/>
+      <InterfacePoint Causality="Bidirectional" Domain="Mechanical" Dimensions="1" Name="tlm" Position="1.5,0,0" Angle321="0,0,0"/>
+    </SubModel>
+  </SubModels>
+  <!-- List of TLM connections -->
+  <Connections>
+    <Connection From="driver.tlm" alpha="0.0" To="load.tlm" Zf="1000" Delay="1e-4">
+      <Annotation Points="{{-55,70.5},{-44,70.5},{-44,72},{8,72},{8,54},{-7,54},{-7,54.5}}"/>
+    </Connection>
+  </Connections>
+  <!-- Parameters for the simulation -->
+  <SimulationParams StartTime="0" StopTime="1"/>
+</Model>

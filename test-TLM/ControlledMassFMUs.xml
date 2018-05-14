@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- The root node is the composite-model -->
+<Model Name="ControlledMassFMUs">
+  <!-- List of connected sub-models -->
+  <SubModels>
+    <SubModel Name="driverfmu" Position="1,0,0" Angle321="0,0,0" ModelFile="Driver.fmu" StartCommand="StartTLMFmiWrapper">
+      <Annotation Origin="{-5,25}" Extent="{-17,-17,17,17}" Rotation="0" Visible="true"/>
+      <InterfacePoint Causality="Bidirectional" Domain="Mechanical" Dimensions="1" Name="fmi" Position="0.5,0,0" Angle321="0,0,0"/>
+      <InterfacePoint Causality="Input" Domain="Signal" Dimensions="1" Name="monitor" Position="0,0,0" Angle321="0,0,0"/>
+      <Parameter Name="mass1.L" Value="1"/>
+      <Parameter Name="mass1.m" Value="0.5"/>
+      <Parameter Name="mass1.stateSelect" Value=""/>
+      <Parameter Name="fmi.debugFlg" Value="0"/>
+      <Parameter Name="fmi.interfaceName" Value="fmitlm"/>
+      <Parameter Name="Kp" Value="1000"/>
+      <Parameter Name="sin1.amplitude" Value="0.5"/>
+      <Parameter Name="sin1.freqHz" Value="10"/>
+      <Parameter Name="sin1.offset" Value="2.5"/>
+      <Parameter Name="sin1.phase" Value="0"/>
+      <Parameter Name="sin1.startTime" Value="0"/>
+    </SubModel>
+    <SubModel Name="loadfmu" Position="0,0,0" Angle321="0,0,0" ModelFile="Load.fmu" StartCommand="StartTLMFmiWrapper">
+      <Annotation Origin="{-5,-27}" Extent="{-17,-17,17,17}" Rotation="0" Visible="true"/>
+      <InterfacePoint Causality="Bidirectional" Domain="Mechanical" Dimensions="1" Name="fmi" Position="1.5,0,0" Angle321="0,0,0"/>
+      <InterfacePoint Causality="Output" Domain="Signal" Dimensions="1" Name="sig" Position="1,0,0" Angle321="0,0,0"/>
+      <Parameter Name="damper1.d" Value="100"/>
+      <Parameter Name="damper1.s_nominal" Value="0.0001"/>
+      <Parameter Name="fixed1.s0" Value="3"/>
+      <Parameter Name="mass2.L" Value="1"/>
+      <Parameter Name="mass2.m" Value="0.5"/>
+      <Parameter Name="mass2.stateSelect" Value=""/>
+      <Parameter Name="fmi.debugFlg" Value="0"/>
+      <Parameter Name="fmi.interfaceName" Value="fmitlm"/>
+    </SubModel>
+  </SubModels>
+  <!-- List of TLM connections -->
+  <Connections>
+    <Connection From="driverfmu.fmi" alpha="0.2" To="loadfmu.fmi" Zf="500." Delay="1e-4">
+      <Annotation Points="{{14,39},{30,39},{30,-12},{14,-12},{14,-13}}"/>
+    </Connection>
+    <Connection From="loadfmu.sig" To="driverfmu.monitor" Delay="1e-4">
+      <Annotation Points="{{14,-19},{46,-19},{46,33},{14,33}}"/>
+    </Connection>
+  </Connections>
+  <!-- Parameters for the simulation -->
+  <SimulationParams StartTime="0" StopTime=".5"/>
+</Model>

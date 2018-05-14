@@ -1,0 +1,530 @@
+<?xml version = "1.0" encoding="UTF-8"?>
+
+<!-- description of the model interface using an extention of the FMI standard -->
+<fmiModelDescription
+  fmiVersion                          = "1.0"
+
+  modelName                           = "Load"
+  modelIdentifier                     = "Load"
+
+  OPENMODELICAHOME                    = "/opt/openmodelica"
+
+  guid                                = "{8c4e810f-3df3-4a00-8276-176fa3c9f9e0}"
+
+  description                         = ""
+  generationTool                      = "OpenModelica Compiler OpenModelica 1.12.0~3-g9389f90"
+  generationDateAndTime               = "2018-04-27T10:43:45Z"
+
+  variableNamingConvention            = "structured"
+
+  numberOfEventIndicators             = "0"  cmt_numberOfEventIndicators             = "NG:       number of zero crossings,                           FMI"
+  numberOfTimeEvents                  = "0"  cmt_numberOfTimeEvents                  = "NG_SAM:   number of zero crossings that are samples,          OMC"
+
+  numberOfInputVariables              = "0"  cmt_numberOfInputVariables              = "NI:       number of inputvar on topmodel,                     OMC"
+  numberOfOutputVariables             = "0"  cmt_numberOfOutputVariables             = "NO:       number of outputvar on topmodel,                    OMC"
+
+  numberOfExternalObjects             = "1"  cmt_numberOfExternalObjects             = "NEXT:     number of external objects,                         OMC"
+  numberOfFunctions                   = "5"  cmt_numberOfFunctions                   = "NFUNC:    number of functions used by the simulation,         OMC"
+
+  numberOfContinuousStates            = "2"  cmt_numberOfContinuousStates            = "NX:       number of states,                                   FMI"
+  numberOfRealAlgebraicVariables      = "15"  cmt_numberOfRealAlgebraicVariables      = "NY:       number of real variables,                           OMC"
+  numberOfRealAlgebraicAliasVariables = "10"  cmt_numberOfRealAlgebraicAliasVariables = "NA:       number of alias variables,                          OMC"
+  numberOfRealParameters              = "5"  cmt_numberOfRealParameters              = "NP:       number of parameters,                               OMC"
+
+  numberOfIntegerAlgebraicVariables   = "0"  cmt_numberOfIntegerAlgebraicVariables   = "NYINT:    number of alg. int variables,                       OMC"
+  numberOfIntegerAliasVariables       = "0"  cmt_numberOfIntegerAliasVariables       = "NAINT:    number of alias int variables,                      OMC"
+  numberOfIntegerParameters           = "2"  cmt_numberOfIntegerParameters           = "NPINT:    number of int parameters,                           OMC"
+
+  numberOfStringAlgebraicVariables    = "0"  cmt_numberOfStringAlgebraicVariables    = "NYSTR:    number of alg. string variables,                    OMC"
+  numberOfStringAliasVariables        = "0"  cmt_numberOfStringAliasVariables        = "NASTR:    number of alias string variables,                   OMC"
+  numberOfStringParameters            = "1"  cmt_numberOfStringParameters            = "NPSTR:    number of string parameters,                        OMC"
+
+  numberOfBooleanAlgebraicVariables   = "0"  cmt_numberOfBooleanAlgebraicVariables   = "NYBOOL:   number of alg. bool variables,                      OMC"
+  numberOfBooleanAliasVariables       = "0"  cmt_numberOfBooleanAliasVariables       = "NABOOL:   number of alias bool variables,                     OMC"
+  numberOfBooleanParameters           = "2"  cmt_numberOfBooleanParameters           = "NPBOOL:   number of bool parameters,                          OMC" >
+
+
+  <!-- startTime, stopTime, tolerance are FMI specific, all others are OMC specific -->
+  <DefaultExperiment
+    startTime      = "0"
+    stopTime       = "1"
+    stepSize       = "0.002"
+    tolerance      = "1e-06"
+    solver        = "dassl"
+    outputFormat      = "mat"
+    variableFilter      = ".*" />
+
+  <!-- variables in the model -->
+  <ModelVariables>
+
+  <ScalarVariable
+    name = "damper1.s_rel"
+    valueReference = "1000"
+    description = "Relative distance (= flange_b.s - flange_a.s)"
+    variability = "continuous" isDiscrete = "false"
+    causality = "internal" isValueChangeable = "true"
+    alias = "noAlias"
+    classIndex = "0" classType = "rSta"
+    isProtected = "false" hideResult = "false"
+    fileName = "/opt/openmodelica/lib/omlibrary/Modelica 3.2.2/Mechanics/Translational.mo" startLine = "4687" startColumn = "7" endLine = "4690" endColumn = "75" fileWritable = "false">
+    <Real start="0.0" fixed="false" useNominal="true" unit="m" />
+  </ScalarVariable>
+  <ScalarVariable
+    name = "damper1.v_rel"
+    valueReference = "1001"
+    description = "Relative velocity (= der(s_rel))"
+    variability = "continuous" isDiscrete = "false"
+    causality = "internal" isValueChangeable = "true"
+    alias = "noAlias"
+    classIndex = "1" classType = "rSta"
+    isProtected = "false" hideResult = "false"
+    fileName = "/opt/openmodelica/lib/omlibrary/Modelica 3.2.2/Mechanics/Translational.mo" startLine = "4691" startColumn = "7" endLine = "4692" endColumn = "43" fileWritable = "false">
+    <Real start="0.0" fixed="true" useNominal="false" unit="m/s" />
+  </ScalarVariable>
+  <ScalarVariable
+    name = "der(damper1.s_rel)"
+    valueReference = "1002"
+    description = "der(Relative distance (= flange_b.s - flange_a.s))"
+    variability = "continuous" isDiscrete = "false"
+    causality = "internal" isValueChangeable = "false"
+    alias = "noAlias"
+    classIndex = "0" classType = "rDer"
+    isProtected = "false" hideResult = "false"
+    fileName = "/opt/openmodelica/lib/omlibrary/Modelica 3.2.2/Mechanics/Translational.mo" startLine = "4687" startColumn = "7" endLine = "4690" endColumn = "75" fileWritable = "false">
+    <Real fixed="false" useNominal="false" unit="m.s-1" />
+  </ScalarVariable>
+  <ScalarVariable
+    name = "der(damper1.v_rel)"
+    valueReference = "1003"
+    description = "der(Relative velocity (= der(s_rel)))"
+    variability = "continuous" isDiscrete = "false"
+    causality = "internal" isValueChangeable = "false"
+    alias = "noAlias"
+    classIndex = "1" classType = "rDer"
+    isProtected = "false" hideResult = "false"
+    fileName = "/opt/openmodelica/lib/omlibrary/Modelica 3.2.2/Mechanics/Translational.mo" startLine = "4691" startColumn = "7" endLine = "4692" endColumn = "43" fileWritable = "false">
+    <Real fixed="false" useNominal="false" unit="m.s-2" />
+  </ScalarVariable>
+  <ScalarVariable
+    name = "der(der(damper1.flange_a.s))"
+    valueReference = "1004"
+    description = "Absolute position of flange"
+    variability = "continuous" isDiscrete = "false"
+    causality = "internal" isValueChangeable = "false"
+    alias = "noAlias"
+    classIndex = "0" classType = "rAlg"
+    isProtected = "false" hideResult = "false"
+    fileName = "/opt/openmodelica/lib/omlibrary/Modelica 3.2.2/Mechanics/Translational.mo" startLine = "4283" startColumn = "7" endLine = "4283" endColumn = "50" fileWritable = "false">
+    <Real start="0.0" fixed="false" useNominal="false" />
+  </ScalarVariable>
+  <ScalarVariable
+    name = "der(damper1.flange_a.s)"
+    valueReference = "1005"
+    description = "Absolute position of flange"
+    variability = "continuous" isDiscrete = "false"
+    causality = "internal" isValueChangeable = "false"
+    alias = "noAlias"
+    classIndex = "1" classType = "rAlg"
+    isProtected = "false" hideResult = "false"
+    fileName = "/opt/openmodelica/lib/omlibrary/Modelica 3.2.2/Mechanics/Translational.mo" startLine = "4283" startColumn = "7" endLine = "4283" endColumn = "50" fileWritable = "false">
+    <Real fixed="false" useNominal="false" />
+  </ScalarVariable>
+  <ScalarVariable
+    name = "der(mass2.s)"
+    valueReference = "1006"
+    description = "Absolute position of center of component (s = flange_a.s + L/2 = flange_b.s - L/2)"
+    variability = "continuous" isDiscrete = "false"
+    causality = "internal" isValueChangeable = "false"
+    alias = "noAlias"
+    classIndex = "2" classType = "rAlg"
+    isProtected = "false" hideResult = "false"
+    fileName = "/opt/openmodelica/lib/omlibrary/Modelica 3.2.2/Mechanics/Translational.mo" startLine = "4622" startColumn = "7" endLine = "4623" endColumn = "93" fileWritable = "false">
+    <Real fixed="false" useNominal="false" />
+  </ScalarVariable>
+  <ScalarVariable
+    name = "der(mass2.v)"
+    valueReference = "1007"
+    description = "Absolute velocity of component"
+    variability = "continuous" isDiscrete = "false"
+    causality = "internal" isValueChangeable = "false"
+    alias = "noAlias"
+    classIndex = "3" classType = "rAlg"
+    isProtected = "false" hideResult = "false"
+    fileName = "/opt/openmodelica/lib/omlibrary/Modelica 3.2.2/Mechanics/Translational.mo" startLine = "1754" startColumn = "7" endLine = "1755" endColumn = "41" fileWritable = "false">
+    <Real start="0.0" fixed="false" useNominal="false" />
+  </ScalarVariable>
+  <ScalarVariable
+    name = "der(tLMForce1D1.flange_b.s)"
+    valueReference = "1008"
+    description = "Absolute position of flange"
+    variability = "continuous" isDiscrete = "false"
+    causality = "internal" isValueChangeable = "false"
+    alias = "noAlias"
+    classIndex = "4" classType = "rAlg"
+    isProtected = "false" hideResult = "false"
+    fileName = "/opt/openmodelica/lib/omlibrary/Modelica 3.2.2/Mechanics/Translational.mo" startLine = "4327" startColumn = "7" endLine = "4327" endColumn = "50" fileWritable = "false">
+    <Real fixed="false" useNominal="false" />
+  </ScalarVariable>
+  <ScalarVariable
+    name = "damper1.f"
+    valueReference = "1009"
+    description = "Forces between flanges (= flange_b.f)"
+    variability = "continuous" isDiscrete = "false"
+    causality = "internal" isValueChangeable = "false"
+    alias = "noAlias"
+    classIndex = "5" classType = "rAlg"
+    isProtected = "false" hideResult = "false"
+    fileName = "/opt/openmodelica/lib/omlibrary/Modelica 3.2.2/Mechanics/Translational.mo" startLine = "4694" startColumn = "7" endLine = "4694" endColumn = "57" fileWritable = "false">
+    <Real start="0.0" fixed="false" useNominal="false" unit="N" />
+  </ScalarVariable>
+  <ScalarVariable
+    name = "damper1.flange_a.s"
+    valueReference = "1010"
+    description = "Absolute position of flange"
+    variability = "continuous" isDiscrete = "false"
+    causality = "internal" isValueChangeable = "false"
+    alias = "noAlias"
+    classIndex = "6" classType = "rAlg"
+    isProtected = "false" hideResult = "false"
+    fileName = "/opt/openmodelica/lib/omlibrary/Modelica 3.2.2/Mechanics/Translational.mo" startLine = "4283" startColumn = "7" endLine = "4283" endColumn = "50" fileWritable = "false">
+    <Real start="3.0" fixed="false" useNominal="false" unit="m" />
+  </ScalarVariable>
+  <ScalarVariable
+    name = "damper1.lossPower"
+    valueReference = "1011"
+    description = "Loss power leaving component via heatPort (&gt; 0, if heat is flowing out of component)"
+    variability = "continuous" isDiscrete = "false"
+    causality = "internal" isValueChangeable = "false"
+    alias = "noAlias"
+    classIndex = "7" classType = "rAlg"
+    isProtected = "false" hideResult = "false"
+    fileName = "/opt/openmodelica/lib/omlibrary/Modelica 3.2.2/Thermal/HeatTransfer.mo" startLine = "2932" startColumn = "7" endLine = "2933" endColumn = "95" fileWritable = "false">
+    <Real start="0.0" fixed="false" useNominal="false" unit="W" />
+  </ScalarVariable>
+  <ScalarVariable
+    name = "mass2.a"
+    valueReference = "1012"
+    description = "Absolute acceleration of component"
+    variability = "continuous" isDiscrete = "false"
+    causality = "internal" isValueChangeable = "false"
+    alias = "noAlias"
+    classIndex = "8" classType = "rAlg"
+    isProtected = "false" hideResult = "false"
+    fileName = "/opt/openmodelica/lib/omlibrary/Modelica 3.2.2/Mechanics/Translational.mo" startLine = "1756" startColumn = "7" endLine = "1756" endColumn = "70" fileWritable = "false">
+    <Real start="0.0" fixed="false" useNominal="false" unit="m/s2" />
+  </ScalarVariable>
+  <ScalarVariable
+    name = "mass2.s"
+    valueReference = "1013"
+    description = "Absolute position of center of component (s = flange_a.s + L/2 = flange_b.s - L/2)"
+    variability = "continuous" isDiscrete = "false"
+    causality = "internal" isValueChangeable = "false"
+    alias = "noAlias"
+    classIndex = "9" classType = "rAlg"
+    isProtected = "false" hideResult = "false"
+    fileName = "/opt/openmodelica/lib/omlibrary/Modelica 3.2.2/Mechanics/Translational.mo" startLine = "4622" startColumn = "7" endLine = "4623" endColumn = "93" fileWritable = "false">
+    <Real start="2.0" fixed="true" useNominal="false" unit="m" />
+  </ScalarVariable>
+  <ScalarVariable
+    name = "mass2.v"
+    valueReference = "1014"
+    description = "Absolute velocity of component"
+    variability = "continuous" isDiscrete = "false"
+    causality = "internal" isValueChangeable = "false"
+    alias = "noAlias"
+    classIndex = "10" classType = "rAlg"
+    isProtected = "false" hideResult = "false"
+    fileName = "/opt/openmodelica/lib/omlibrary/Modelica 3.2.2/Mechanics/Translational.mo" startLine = "1754" startColumn = "7" endLine = "1755" endColumn = "41" fileWritable = "false">
+    <Real start="0.0" fixed="false" useNominal="false" unit="m/s" />
+  </ScalarVariable>
+  <ScalarVariable
+    name = "tLMForce1D1.f"
+    valueReference = "1015"
+    variability = "continuous" isDiscrete = "false"
+    causality = "internal" isValueChangeable = "false"
+    alias = "noAlias"
+    classIndex = "11" classType = "rAlg"
+    isProtected = "false" hideResult = "false"
+    fileName = "/Users/spinhalf/Documents/Modelica/OMTLMSimulator/bin/OpenModelica/OM_TLM.mo" startLine = "203" startColumn = "3" endLine = "203" endColumn = "20" fileWritable = "true">
+    <Real start="0.0" fixed="false" useNominal="false" />
+  </ScalarVariable>
+  <ScalarVariable
+    name = "tLMForce1D1.flange_b.s"
+    valueReference = "1016"
+    description = "Absolute position of flange"
+    variability = "continuous" isDiscrete = "false"
+    causality = "internal" isValueChangeable = "false"
+    alias = "noAlias"
+    classIndex = "12" classType = "rAlg"
+    isProtected = "false" hideResult = "false"
+    fileName = "/opt/openmodelica/lib/omlibrary/Modelica 3.2.2/Mechanics/Translational.mo" startLine = "4327" startColumn = "7" endLine = "4327" endColumn = "50" fileWritable = "false">
+    <Real start="1.5" fixed="false" useNominal="false" unit="m" />
+  </ScalarVariable>
+  <ScalarVariable
+    name = "tLMForce1D1.tlmDelay"
+    valueReference = "1017"
+    variability = "continuous" isDiscrete = "false"
+    causality = "internal" isValueChangeable = "false"
+    alias = "noAlias"
+    classIndex = "13" classType = "rAlg"
+    isProtected = "false" hideResult = "false"
+    fileName = "/Users/spinhalf/Documents/Modelica/OMTLMSimulator/bin/OpenModelica/OM_TLM.mo" startLine = "204" startColumn = "3" endLine = "204" endColumn = "59" fileWritable = "true">
+    <Real fixed="false" useNominal="false" />
+  </ScalarVariable>
+  <ScalarVariable
+    name = "tLMForce1D1.v"
+    valueReference = "1018"
+    variability = "continuous" isDiscrete = "false"
+    causality = "internal" isValueChangeable = "false"
+    alias = "noAlias"
+    classIndex = "14" classType = "rAlg"
+    isProtected = "false" hideResult = "false"
+    fileName = "/Users/spinhalf/Documents/Modelica/OMTLMSimulator/bin/OpenModelica/OM_TLM.mo" startLine = "202" startColumn = "3" endLine = "202" endColumn = "20" fileWritable = "true">
+    <Real start="0.0" fixed="false" useNominal="false" />
+  </ScalarVariable>
+  <ScalarVariable
+    name = "damper1.d"
+    valueReference = "1019"
+    description = "Damping constant"
+    variability = "parameter" isDiscrete = "true"
+    causality = "internal" isValueChangeable = "true"
+    alias = "noAlias"
+    classIndex = "0" classType = "rPar"
+    isProtected = "false" hideResult = "false"
+    fileName = "/opt/openmodelica/lib/omlibrary/Modelica 3.2.2/Mechanics/Translational.mo" startLine = "1938" startColumn = "7" endLine = "1939" endColumn = "27" fileWritable = "false">
+    <Real start="100.0" fixed="true" useNominal="false" min="0.0" unit="N.s/m" />
+  </ScalarVariable>
+  <ScalarVariable
+    name = "damper1.s_nominal"
+    valueReference = "1020"
+    description = "Nominal value of s_rel (used for scaling)"
+    variability = "parameter" isDiscrete = "true"
+    causality = "internal" isValueChangeable = "true"
+    alias = "noAlias"
+    classIndex = "1" classType = "rPar"
+    isProtected = "false" hideResult = "false"
+    fileName = "/opt/openmodelica/lib/omlibrary/Modelica 3.2.2/Mechanics/Translational.mo" startLine = "4683" startColumn = "7" endLine = "4685" endColumn = "44" fileWritable = "false">
+    <Real start="0.0001" fixed="true" useNominal="false" min="0.0" unit="m" />
+  </ScalarVariable>
+  <ScalarVariable
+    name = "fixed1.s0"
+    valueReference = "1021"
+    description = "Fixed offset position of housing"
+    variability = "parameter" isDiscrete = "true"
+    causality = "internal" isValueChangeable = "true"
+    alias = "noAlias"
+    classIndex = "2" classType = "rPar"
+    isProtected = "false" hideResult = "false"
+    fileName = "/opt/openmodelica/lib/omlibrary/Modelica 3.2.2/Mechanics/Translational.mo" startLine = "1715" startColumn = "7" endLine = "1715" endColumn = "68" fileWritable = "false">
+    <Real start="3.0" fixed="true" useNominal="false" unit="m" />
+  </ScalarVariable>
+  <ScalarVariable
+    name = "mass2.L"
+    valueReference = "1022"
+    description = "Length of component, from left flange to right flange (= flange_b.s - flange_a.s)"
+    variability = "parameter" isDiscrete = "true"
+    causality = "internal" isValueChangeable = "true"
+    alias = "noAlias"
+    classIndex = "3" classType = "rPar"
+    isProtected = "false" hideResult = "false"
+    fileName = "/opt/openmodelica/lib/omlibrary/Modelica 3.2.2/Mechanics/Translational.mo" startLine = "4624" startColumn = "7" endLine = "4625" endColumn = "92" fileWritable = "false">
+    <Real start="1.0" fixed="true" useNominal="false" unit="m" />
+  </ScalarVariable>
+  <ScalarVariable
+    name = "mass2.m"
+    valueReference = "1023"
+    description = "Mass of the sliding mass"
+    variability = "parameter" isDiscrete = "true"
+    causality = "internal" isValueChangeable = "true"
+    alias = "noAlias"
+    classIndex = "4" classType = "rPar"
+    isProtected = "false" hideResult = "false"
+    fileName = "/opt/openmodelica/lib/omlibrary/Modelica 3.2.2/Mechanics/Translational.mo" startLine = "1749" startColumn = "7" endLine = "1749" endColumn = "69" fileWritable = "false">
+    <Real start="0.5" fixed="true" useNominal="false" min="0.0" unit="kg" />
+  </ScalarVariable>
+  <ScalarVariable
+    name = "damper1.flange_a.f"
+    valueReference = "1024"
+    description = "Cut force directed into flange"
+    variability = "continuous" isDiscrete = "false"
+    causality = "internal" isValueChangeable = "false"
+    alias = "negatedAlias" aliasVariable="damper1.f"
+    classIndex = "0" classType = "rAli"
+    isProtected = "false" hideResult = "false"
+    fileName = "/opt/openmodelica/lib/omlibrary/Modelica 3.2.2/Mechanics/Translational.mo" startLine = "4284" startColumn = "7" endLine = "4284" endColumn = "55" fileWritable = "false">
+    <Real fixed="false" useNominal="false" unit="N" />
+  </ScalarVariable>
+  <ScalarVariable
+    name = "damper1.flange_b.f"
+    valueReference = "1025"
+    description = "Cut force directed into flange"
+    variability = "continuous" isDiscrete = "false"
+    causality = "internal" isValueChangeable = "false"
+    alias = "alias" aliasVariable="damper1.f"
+    classIndex = "1" classType = "rAli"
+    isProtected = "false" hideResult = "false"
+    fileName = "/opt/openmodelica/lib/omlibrary/Modelica 3.2.2/Mechanics/Translational.mo" startLine = "4328" startColumn = "7" endLine = "4328" endColumn = "55" fileWritable = "false">
+    <Real fixed="false" useNominal="false" unit="N" />
+  </ScalarVariable>
+  <ScalarVariable
+    name = "damper1.flange_b.s"
+    valueReference = "1026"
+    description = "Absolute position of flange"
+    variability = "continuous" isDiscrete = "false"
+    causality = "internal" isValueChangeable = "false"
+    alias = "alias" aliasVariable="fixed1.s0"
+    classIndex = "2" classType = "rAli"
+    isProtected = "false" hideResult = "false"
+    fileName = "/opt/openmodelica/lib/omlibrary/Modelica 3.2.2/Mechanics/Translational.mo" startLine = "4327" startColumn = "7" endLine = "4327" endColumn = "50" fileWritable = "false">
+    <Real fixed="false" useNominal="false" unit="m" />
+  </ScalarVariable>
+  <ScalarVariable
+    name = "fixed1.flange.f"
+    valueReference = "1027"
+    description = "Cut force directed into flange"
+    variability = "continuous" isDiscrete = "false"
+    causality = "internal" isValueChangeable = "false"
+    alias = "negatedAlias" aliasVariable="damper1.f"
+    classIndex = "3" classType = "rAli"
+    isProtected = "false" hideResult = "false"
+    fileName = "/opt/openmodelica/lib/omlibrary/Modelica 3.2.2/Mechanics/Translational.mo" startLine = "4328" startColumn = "7" endLine = "4328" endColumn = "55" fileWritable = "false">
+    <Real fixed="false" useNominal="false" unit="N" />
+  </ScalarVariable>
+  <ScalarVariable
+    name = "fixed1.flange.s"
+    valueReference = "1028"
+    description = "Absolute position of flange"
+    variability = "continuous" isDiscrete = "false"
+    causality = "internal" isValueChangeable = "false"
+    alias = "alias" aliasVariable="fixed1.s0"
+    classIndex = "4" classType = "rAli"
+    isProtected = "false" hideResult = "false"
+    fileName = "/opt/openmodelica/lib/omlibrary/Modelica 3.2.2/Mechanics/Translational.mo" startLine = "4327" startColumn = "7" endLine = "4327" endColumn = "50" fileWritable = "false">
+    <Real fixed="false" useNominal="false" unit="m" />
+  </ScalarVariable>
+  <ScalarVariable
+    name = "mass2.flange_a.f"
+    valueReference = "1029"
+    description = "Cut force directed into flange"
+    variability = "continuous" isDiscrete = "false"
+    causality = "internal" isValueChangeable = "false"
+    alias = "negatedAlias" aliasVariable="tLMForce1D1.f"
+    classIndex = "5" classType = "rAli"
+    isProtected = "false" hideResult = "false"
+    fileName = "/opt/openmodelica/lib/omlibrary/Modelica 3.2.2/Mechanics/Translational.mo" startLine = "4284" startColumn = "7" endLine = "4284" endColumn = "55" fileWritable = "false">
+    <Real fixed="false" useNominal="false" unit="N" />
+  </ScalarVariable>
+  <ScalarVariable
+    name = "mass2.flange_a.s"
+    valueReference = "1030"
+    description = "Absolute position of flange"
+    variability = "continuous" isDiscrete = "false"
+    causality = "internal" isValueChangeable = "false"
+    alias = "alias" aliasVariable="tLMForce1D1.flange_b.s"
+    classIndex = "6" classType = "rAli"
+    isProtected = "false" hideResult = "false"
+    fileName = "/opt/openmodelica/lib/omlibrary/Modelica 3.2.2/Mechanics/Translational.mo" startLine = "4283" startColumn = "7" endLine = "4283" endColumn = "50" fileWritable = "false">
+    <Real fixed="false" useNominal="false" unit="m" />
+  </ScalarVariable>
+  <ScalarVariable
+    name = "mass2.flange_b.f"
+    valueReference = "1031"
+    description = "Cut force directed into flange"
+    variability = "continuous" isDiscrete = "false"
+    causality = "internal" isValueChangeable = "false"
+    alias = "alias" aliasVariable="damper1.f"
+    classIndex = "7" classType = "rAli"
+    isProtected = "false" hideResult = "false"
+    fileName = "/opt/openmodelica/lib/omlibrary/Modelica 3.2.2/Mechanics/Translational.mo" startLine = "4328" startColumn = "7" endLine = "4328" endColumn = "55" fileWritable = "false">
+    <Real fixed="false" useNominal="false" unit="N" />
+  </ScalarVariable>
+  <ScalarVariable
+    name = "mass2.flange_b.s"
+    valueReference = "1032"
+    description = "Absolute position of flange"
+    variability = "continuous" isDiscrete = "false"
+    causality = "internal" isValueChangeable = "false"
+    alias = "alias" aliasVariable="damper1.flange_a.s"
+    classIndex = "8" classType = "rAli"
+    isProtected = "false" hideResult = "false"
+    fileName = "/opt/openmodelica/lib/omlibrary/Modelica 3.2.2/Mechanics/Translational.mo" startLine = "4327" startColumn = "7" endLine = "4327" endColumn = "50" fileWritable = "false">
+    <Real fixed="false" useNominal="false" unit="m" />
+  </ScalarVariable>
+  <ScalarVariable
+    name = "tLMForce1D1.flange_b.f"
+    valueReference = "1033"
+    description = "Cut force directed into flange"
+    variability = "continuous" isDiscrete = "false"
+    causality = "internal" isValueChangeable = "false"
+    alias = "alias" aliasVariable="tLMForce1D1.f"
+    classIndex = "9" classType = "rAli"
+    isProtected = "false" hideResult = "false"
+    fileName = "/opt/openmodelica/lib/omlibrary/Modelica 3.2.2/Mechanics/Translational.mo" startLine = "4328" startColumn = "7" endLine = "4328" endColumn = "55" fileWritable = "false">
+    <Real fixed="false" useNominal="false" unit="N" />
+  </ScalarVariable>
+  <ScalarVariable
+    name = "damper1.stateSelect"
+    valueReference = "1034"
+    description = "Priority to use s_rel and v_rel as states"
+    variability = "parameter" isDiscrete = "true"
+    causality = "internal" isValueChangeable = "false"
+    alias = "noAlias"
+    classIndex = "0" classType = "iPar"
+    isProtected = "false" hideResult = "true"
+    fileName = "/opt/openmodelica/lib/omlibrary/Modelica 3.2.2/Mechanics/Translational.mo" startLine = "4680" startColumn = "7" endLine = "4682" endColumn = "61" fileWritable = "false">
+    <Integer start="4" fixed="true" />
+  </ScalarVariable>
+  <ScalarVariable
+    name = "mass2.stateSelect"
+    valueReference = "1035"
+    description = "Priority to use s and v as states"
+    variability = "parameter" isDiscrete = "true"
+    causality = "internal" isValueChangeable = "true"
+    alias = "noAlias"
+    classIndex = "1" classType = "iPar"
+    isProtected = "false" hideResult = "false"
+    fileName = "/opt/openmodelica/lib/omlibrary/Modelica 3.2.2/Mechanics/Translational.mo" startLine = "1750" startColumn = "7" endLine = "1751" endColumn = "80" fileWritable = "false">
+    <Integer start="3" fixed="true" />
+  </ScalarVariable>
+  <ScalarVariable
+    name = "damper1.useHeatPort"
+    valueReference = "1036"
+    description = "=true, if heatPort is enabled"
+    variability = "parameter" isDiscrete = "true"
+    causality = "internal" isValueChangeable = "false"
+    alias = "noAlias"
+    classIndex = "0" classType = "bPar"
+    isProtected = "false" hideResult = "true"
+    fileName = "/opt/openmodelica/lib/omlibrary/Modelica 3.2.2/Thermal/HeatTransfer.mo" startLine = "2925" startColumn = "7" endLine = "2926" endColumn = "75" fileWritable = "false">
+    <Boolean start="false" fixed="true" />
+  </ScalarVariable>
+  <ScalarVariable
+    name = "tLMForce1D1.debugFlg"
+    valueReference = "1037"
+    variability = "parameter" isDiscrete = "true"
+    causality = "internal" isValueChangeable = "true"
+    alias = "noAlias"
+    classIndex = "1" classType = "bPar"
+    isProtected = "false" hideResult = "false"
+    fileName = "/Users/spinhalf/Documents/Modelica/OMTLMSimulator/bin/OpenModelica/OM_TLM.mo" startLine = "201" startColumn = "3" endLine = "201" endColumn = "37" fileWritable = "true">
+    <Boolean start="false" fixed="true" />
+  </ScalarVariable>
+  <ScalarVariable
+    name = "tLMForce1D1.interfaceName"
+    valueReference = "1038"
+    variability = "parameter" isDiscrete = "true"
+    causality = "internal" isValueChangeable = "true"
+    alias = "noAlias"
+    classIndex = "0" classType = "sPar"
+    isProtected = "false" hideResult = "false"
+    fileName = "/Users/spinhalf/Documents/Modelica/OMTLMSimulator/bin/OpenModelica/OM_TLM.mo" startLine = "200" startColumn = "3" endLine = "200" endColumn = "41" fileWritable = "true">
+    <String start="tlm" fixed="true" />
+  </ScalarVariable>
+
+
+
+  </ModelVariables>
+
+
+</fmiModelDescription>
+

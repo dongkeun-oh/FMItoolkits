@@ -1,0 +1,10 @@
+[submodule "ExternalMedia"]
+	path = ExternalMedia
+	url = https://github.com/nfri-devel/ExternalMedia
+	branch = nfri
+[submodule "ThermoPower"]
+	path = ThermoPower
+	url = https://github.com/dongkeun-oh/ThermoPower
+[submodule "OMTLMSimulator"]
+	path = OMTLMSimulator
+	url = https://github.com/dongkeun-oh/OMTLMSimulator
