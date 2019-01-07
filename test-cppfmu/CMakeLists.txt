@@ -1,8 +1,19 @@
 cmake_minimum_required(VERSION 1.8.12)
 
+option(FMU_USE_STATIC_RUNTIME "Whether to link the model code against a static C(++) runtime library" ON)
+
 if(APPLE)
   set(CMAKE_C_COMPILER "gcc-7")
   set(CMAKE_CXX_COMPILER "g++-7")
+elseif(WIN32)
+  if(MSVC)
+    set(CMAKE_TOOLCHAIN_FILE "D:/Users/spinhalf.MICROWAVE/Work/vcpkg/scripts/buildsystems/vcpkg.cmake" )
+    if(FMU_USE_STATIC_RUNTIME)
+      set(VCPKG_TARGET_TRIPLET "x64-windows-static")
+    else()
+      set(VCPKG_TARGET_TRIPLET "x64-windows")
+    endif()   
+  endif()
 endif()
 
 project(test-cppfmu)
@@ -77,8 +88,6 @@ set(fmuUuidCommand "${binDir}/fmu-uuid")
 
 # Creat targets
 
-option(FMU_USE_STATIC_RUNTIME "Whether to link the model code against a static C(++) runtime library" ON)
-
 if(FMI_VERSION MATCHES "2.0")
   # CPPFMU2
   file(GLOB cppfmu "${CMAKE_SOURCE_DIR}/../cppfmu2/*.?pp")  
@@ -115,7 +124,7 @@ else()
     set(fmuFullOutputDir "${FMU_OUTPUT_DIR}/${CMAKE_BUILD_TYPE}")
 endif()
 
-set(fmuList "sine")
+set(fmuList "sine" "cpipe")
 
 foreach(fmu IN LISTS fmuList)
   set(dlTarget "${fmu}")
@@ -142,7 +151,6 @@ foreach(fmu IN LISTS fmuList)
     DEPENDS "${sourceModelDescription}"
     VERBATIM
     )
-
   add_custom_target(${uuidTarget}
     DEPENDS fmu-uuid "${outputModelDescription}" "${outputUuidHeader}"
     )
@@ -156,10 +164,40 @@ foreach(fmu IN LISTS fmuList)
       PROPERTIES PREFIX ""
       SUFFIX ".dylib"
       ) 
+  elseif (os MATCHES "win")
+    set_target_properties(${dlTarget}
+      PROPERTIES PREFIX ""
+      SUFFIX ".dll"
+      ) 
+  endif()
+  # Boost dependence
+  if(FMU_USE_STATIC_RUNTIME)
+    set(Boost_USE_STATIC_LIBS ON)
+    set(Boost_USE_STATIC_RUNTIME ON)
+  else()
+     set(Boost_USE_STATIC_LIBS OFF)
+    set(Boost_USE_STATIC_RUNTIME OFF)
+  endif() 
+  set(Boost_USE_MULTITHREADED ON)  
+  find_package(Boost REQUIRED COMPONENTS system filesystem)
+  include_directories(${Boost_INCLUDE_DIRS})
+  target_link_libraries(${dlTarget} ${Boost_LIBRARIES})
+  if(MINGW)
+    target_link_libraries(${dlTarget} ws2_32)
   endif()
   set_target_properties(${dlTarget} PROPERTIES
     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE}/${fmuPlatform}")
   add_dependencies(${dlTarget} ${uuidTarget})
+  if ("${dlTarget}" STREQUAL "cpipe")
+     set(_cpipe_coreDir "${sourceDir}/_cpipe_core")
+     ExternalProject_Add(_cpipe_core
+     DOWNLOAD_COMMAND ""
+     CMAKE_ARGS "-DCMAKE_INSTALL_PREFIX=${CMAKE_SOURCE_DIR}"
+     SOURCE_DIR "${_cpipe_coreDir}"
+  )
+set(fmuUuidCommand "${binDir}/fmu-uuid")
+    add_dependencies(${dlTarget} "_cpipe_core")
+  endif()
   target_compile_definitions(${dlTarget} PRIVATE
     "MODEL_IDENTIFIER=${fmu}")
   target_include_directories(${dlTarget} PRIVATE ${fmuIncludeDirs})

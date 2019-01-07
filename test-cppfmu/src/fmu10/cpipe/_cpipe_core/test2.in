@@ -1,0 +1,7 @@
+ &INDATA
+    AREA = 3.14E-5, DH = 6.32E-3, PERH = 0.01986, XLEN = 10.,
+    TMBEG = 0.0, TMEND = 100.0, TMSTEP = 1E-2, OUTSTEP = 1.0,
+    PINL = 5.0E5, TINL = 4.2, POUT = 5.0E5, TOUT = 4.2,
+    Q0 = 0.0, N = 25, OFILENAME='cpipe2.dat'
+ &END
+ 

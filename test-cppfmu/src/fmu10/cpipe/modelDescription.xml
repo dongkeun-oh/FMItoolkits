@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<fmiModelDescription
+    fmiVersion="1.0"
+    modelName="CpipeTest"
+    modelIdentifier="cpipe"
+    guid="@FMU_UUID@"
+    author="Dong Keun Oh"
+    description="FMU module of CPIPE model for test run"
+    version="0.1"
+    variableNamingConvention="structured"
+    numberOfContinuousStates="0"
+    numberOfEventIndicators="0">
+
+    <ModelVariables>
+        <ScalarVariable name="pi" valueReference="0" variability="continuous"  causality="input" ><Real start="1.E5" /></ScalarVariable>
+        <ScalarVariable name="po" valueReference="1" variability="continuous"  causality="input" ><Real start="1.E5" /></ScalarVariable>
+        <ScalarVariable name="Ti" valueReference="2" variability="continuous"  causality="input" ><Real start="4.5" /></ScalarVariable>
+        <ScalarVariable name="To" valueReference="3" variability="continuous"  causality="input" ><Real start="4.5" /></ScalarVariable>
+        <ScalarVariable name="mdoti" valueReference="4" variability="continuous"  causality="output" ><Real start="0.0" /></ScalarVariable>
+        <ScalarVariable name="mdoto" valueReference="5" variability="continuous"  causality="output" ><Real start="0.0" /></ScalarVariable>
+        <ScalarVariable name="Tir" valueReference="6" variability="continuous"  causality="output" ><Real start="4.5" /></ScalarVariable>
+        <ScalarVariable name="Tor" valueReference="7" variability="continuous"  causality="output" ><Real start="4.5" /></ScalarVariable>
+        <ScalarVariable name="deltai" valueReference="8" variability="continuous"  causality="output" ><Real start="0.0" /></ScalarVariable>
+        <ScalarVariable name="deltao" valueReference="9" variability="continuous"  causality="output" ><Real start="0.0" /></ScalarVariable>
+        
+        <ScalarVariable
+                name="cpipe.in"
+                valueReference="0"
+                description="cpipe input file name"
+                variability="parameter"
+                causality="internal">
+                <String start="thea.input" fixed="true"/>
+        </ScalarVariable>
+        <ScalarVariable
+                name="cpipe.dir"
+                valueReference="1"
+                description="cpipe working directory"
+                variability="parameter"
+                causality="internal">
+                <String start="." fixed="true"/>
+        </ScalarVariable>
+    </ModelVariables>
+
+    <Implementation>
+        <CoSimulation_StandAlone>
+            <Capabilities
+                canHandleVariableCommunicationStepSize="true"
+                canBeInstantiatedOnlyOncePerProcess="false" />
+        </CoSimulation_StandAlone>
+    </Implementation>
+</fmiModelDescription>

@@ -6,7 +6,10 @@
 #temporary parts are neglected
 build/
 temp/
-
+tmp/
+Debug/
+release/
+bin/
 #ignorable files 
 .DS_Store
 .Trashes
