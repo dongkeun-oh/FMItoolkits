@@ -8,6 +8,9 @@
 #include <cmath>
 #include <cstring>
 #include <cppfmu_cs.hpp>
+#ifndef __kernel_entry
+  #define __kernel_entry
+#endif
 #include <boost/process.hpp>
 
 #include "cpipe-fmu-uuid.h"
@@ -22,8 +25,7 @@ enum
     VR_IN_hi    = 2,
     VR_IN_ho    = 3,    
     VR_INPUT_COUNT = 4,
-	VR_INPUT_TOTAL = 6,
-
+    VR_INPUT_TOTAL = 6,
     // outputs
     VR_OUT_mdoti    = 4,
     VR_OUT_mdoto    = 5,
@@ -32,11 +34,9 @@ enum
     VR_OUT_deltai = 8,
     VR_OUT_deltao = 9,
     VR_OUTPUT_COUNT = 6,
-	VR_OUTPUT_TOTAL = 7,
-    
+    VR_OUTPUT_TOTAL = 7,
     // total number of variables
     VR_COUNT = 10,
-    
     // strings
     VSTR_COUNT = 2,
     };
@@ -73,10 +73,10 @@ private:
         const override
     {
 
-      for (std::size_t i = 0; i < nvr; ++i) 
-	    if (vr[i] >= VR_INPUT_COUNT && vr[i] < VR_COUNT) 
-	       value[i] = m_output[vr[i]-VR_INPUT_COUNT];
-	    else 
+        for (std::size_t i = 0; i < nvr; ++i) 
+           if (vr[i] >= VR_INPUT_COUNT && vr[i] < VR_COUNT) 
+               value[i] = m_output[vr[i]-VR_INPUT_COUNT];
+           else 
 	       throw std::out_of_range{"Value reference out of range"};		
     }
 
@@ -86,14 +86,14 @@ private:
         const fmiString value[])
         override
     {
-      for (std::size_t i = 0; i < nvr; ++i)
-	    switch( vr[i]) {
-	    case 0: m_cpipe_input = std::make_unique<std::string>(value[i]);
+        for (std::size_t i = 0; i < nvr; ++i)
+            switch( vr[i]) {
+	        case 0: m_cpipe_input = std::make_unique<std::string>(value[i]);
 	            break;
-	    case 1: m_cpipe_workdir = std::make_unique<std::string>(value[i]);
+	        case 1: m_cpipe_workdir = std::make_unique<std::string>(value[i]);
 	            break;
-	    default: throw std::out_of_range{"Value reference out of range"};
-	  }
+	        default: throw std::out_of_range{"Value reference out of range"};
+	    }
     }
   
     void GetString(
@@ -104,11 +104,11 @@ private:
     {
         for (std::size_t i = 0; i < nvr; ++i)  
 	    switch( vr[i]) {
-	    case 0: value[i] = m_cpipe_input->c_str();
+                case 0: value[i] = m_cpipe_input->c_str();
+                    break;
+	        case 1: value[i] = m_cpipe_workdir->c_str();
 	            break;
-	    case 1: value[i] = m_cpipe_workdir->c_str();
-	            break;
-	    default: throw std::out_of_range{"Value reference out of range"};
+	        default: throw std::out_of_range{"Value reference out of range"};
 	  }
     }
 
@@ -122,16 +122,18 @@ private:
         m_initialized = fmiFalse;		
  
         _launch_cpipe_core();
-		_init_cpipe();
+        _init_cpipe();
     }
 
     void Terminate()
         override
     {
-		m_input[VR_INPUT_COUNT] = -1.0;
+	if (opipe_stream != nullptr && cpipe_core != nullptr) {
+            m_input[VR_INPUT_COUNT] = -1.0;
 	    m_input[VR_INPUT_COUNT+1] = 0.0; 
-        opipe_stream.write(reinterpret_cast<char *>(m_input), sizeof(double)*VR_INPUT_TOTAL)<< std::flush;
-        if (cpipe_core != nullptr) cpipe_core->wait();
+            opipe_stream->write(reinterpret_cast<char *>(m_input), sizeof(double)*VR_INPUT_TOTAL)<< std::flush;
+            cpipe_core->wait();
+	 }
     }
   
     bool DoStep(
@@ -149,67 +151,73 @@ private:
     void Reset() override
     {
         m_time = 0.0;
-		m_initialized = fmiFalse;
+	m_initialized = fmiFalse;
         for (auto& v : m_input) v = 0.0;
         for (auto& v : m_output) v = 0.0;	
 
-        if (cpipe_core != nullptr) cpipe_core->terminate();
+        if (cpipe_core != nullptr) {
+            cpipe_core->terminate();
+	    cpipe_core->wait();
+	}
      }
 	
     void _launch_cpipe_core(void) {
-       std::string exe_core("_cpipe_core");
-       cpipe_core = std::make_unique<bproc::child>( bproc::search_path(exe_core), bproc::std_out > ipipe_stream, bproc::std_in < opipe_stream);    
-       return;
+        std::string exe_core("_cpipe_core");
+        ipipe_stream = std::make_unique<bproc::ipstream>();
+        opipe_stream = std::make_unique<bproc::opstream>();
+        cpipe_core = std::make_unique<bproc::child>( bproc::search_path(exe_core), bproc::std_out > *ipipe_stream, bproc::std_in < *opipe_stream);    
+
+        return;
     }
 
     void _init_cpipe(void) {
-       int status;
-       bool ok = false;
+        int status;
+        bool ok = false;
        
-	   if (m_initialized == fmiFalse) {
-	      opipe_stream << m_cpipe_input->c_str() << std::endl;  //sending input file name	       
-	      opipe_stream << m_cpipe_workdir->c_str() << std::endl;  //sending work directory name	       		  
-	      ok = true&&ipipe_stream.read(reinterpret_cast<char *>(&status), sizeof(int));
-	      if (status != 0 || !ok) {
-		     _clear_buffer();
-		     std::string errMsg;
-		     switch(status) {
-			    case (-1) : errMsg = "IO Error";
-                    break;
-			    case (-3): errMsg = "already initialized";
-                    break;
-			    case (2) : errMsg = "wrong input data";
-                    break;
-			    default : errMsg = "something unknown";
-                    break;
-			  }
-		     throw std::runtime_error("Error in Init : " + errMsg);
-		  }
-		  else 
-			 m_initialized = fmiTrue;
-	   }
+        if (m_initialized == fmiFalse) {
+            *opipe_stream << m_cpipe_input->c_str() << std::endl;  //sending input file name	      
+	    *opipe_stream << m_cpipe_workdir->c_str() << std::endl;  //sending work directory name	       		  
+	    ok = true&&ipipe_stream->read(reinterpret_cast<char *>(&status), sizeof(int));
+	    if (status != 0 || !ok) {
+                _clear_buffer();
+                std::string errMsg;
+	        switch(status) {
+                    case (-1) : errMsg = "IO Error";
+                        break;
+	            case (-3): errMsg = "already initialized";
+                        break;
+    	            case (2) : errMsg = "wrong input data";
+                        break;
+                    default : errMsg = "something unknown";
+                        break;
+	        }
+	        throw std::runtime_error("Error in Init : " + errMsg);
+	    }
+            else 
+                m_initialized = fmiTrue;
 	}
+    }
 
-	void _dostep_cpipe(double time, double timestep) {
-       bool ok = false;
+    void _dostep_cpipe(double time, double timestep) {
+        bool ok = false;
 	   
-	   if (m_initialized == fmiTrue) {
-	      m_input[VR_INPUT_COUNT] = time;
-	      m_input[VR_INPUT_COUNT+1] = timestep;
-	      opipe_stream.write(reinterpret_cast<char *>(m_input), sizeof(double)*VR_INPUT_TOTAL)<< std::flush;
-	      ok = true&&ipipe_stream.read(reinterpret_cast<char *>(m_output), sizeof(double)*VR_OUTPUT_TOTAL);
-	      if (m_output[VR_OUTPUT_COUNT] != 0.0 || !ok) {
-		     if (cpipe_core != nullptr) cpipe_core->terminate();
-	         throw std::runtime_error("Error in DoStep");
-		   }   
-	      else 
-		     m_time = time + timestep;
-	   }
+	if (m_initialized == fmiTrue) {
+	    m_input[VR_INPUT_COUNT] = time;
+	    m_input[VR_INPUT_COUNT+1] = timestep;
+	    opipe_stream->write(reinterpret_cast<char *>(m_input), sizeof(double)*VR_INPUT_TOTAL)<< std::flush;
+            ok = true&&ipipe_stream->read(reinterpret_cast<char *>(m_output), sizeof(double)*VR_OUTPUT_TOTAL);
+	    if (m_output[VR_OUTPUT_COUNT] != 0.0 || !ok) {
+                if (cpipe_core != nullptr) cpipe_core->terminate();
+                throw std::runtime_error("Error in DoStep 1");
+	    }   
+	    else 
+	         m_time = time + timestep;
 	}
+    }
 	
     inline void _clear_buffer(void) {
-       char ch;
-	   while (ipipe_stream.rdbuf()->in_avail()) ipipe_stream.get(ch); //clear input stream buffer 
+        char ch;
+        while (ipipe_stream->rdbuf()->in_avail()) ipipe_stream->get(ch); //clear input stream buffer 
     }
     
     fmiBoolean m_initialized;
@@ -217,8 +225,8 @@ private:
     fmiReal m_input[VR_INPUT_TOTAL], m_output[VR_OUTPUT_TOTAL];	
     std::unique_ptr<std::string> m_cpipe_input, m_cpipe_workdir;
     std::unique_ptr<bproc::child> cpipe_core;
-    bproc::ipstream  ipipe_stream;
-    bproc::opstream  opipe_stream;
+    std::unique_ptr<bproc::ipstream> ipipe_stream;
+    std::unique_ptr<bproc::opstream> opipe_stream;
 };
 
 

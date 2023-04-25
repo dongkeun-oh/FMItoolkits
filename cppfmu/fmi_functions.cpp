@@ -134,9 +134,11 @@ DllExport fmiStatus fmiInitializeSlave(
     try {
       component->checkInstance(modelInstantiated, "fmiInitializeSlave");
       //
+      if ( component->instance->modelState() & modelInitialized) 
+         component->instance->Reset();
       component->instance->Initialize(tStart, stopTimeDefined, tStop);
       //
-      component->instance->modelState() = modelInitialized;
+      component->instance->modelState() = static_cast<ModelState>(modelInstantiated|modelInitialized);
       return fmiOK;
     } catch (const cppfmu::FatalError& e) {
         component->logger.Log(fmiFatal, "fatal", e.what());

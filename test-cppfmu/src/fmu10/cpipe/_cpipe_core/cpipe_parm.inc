@@ -1,7 +1,7 @@
       INTEGER NREAD, NWRITE
       PARAMETER (NREAD = 4, NWRITE = 6)
-	  INTEGER OUNIT, LOGUNIT0
-	  PARAMETER (OUNIT = 20, LOGUNIT0=21)
+      INTEGER OUNIT, LOGUNIT0
+      PARAMETER (OUNIT = 20, LOGUNIT0=21)
 	  
 c * cpipe input parameters
       REAL  AREA,DH,PERH,XLEN
@@ -11,7 +11,7 @@ c * cpipe input parameters
       INTEGER  N
 	  INTEGER  LOGUNIT
       COMMON /IN/ AREA,DH,PERH,XLEN,
-     &        TMBEG,TMEND,TMSTEP,OUTSTEP,
+     &            TMBEG,TMEND,TMSTEP,OUTSTEP,
      &		  PINL,TINL,POUT,TOUT,Q0,
      &		  N
      
@@ -22,5 +22,5 @@ c * cpipe Input/Output file
 c *
       NAMELIST /INDATA/ AREA,DH,PERH,XLEN,
      &        TMBEG,TMEND,TMSTEP,OUTSTEP,
-     &		  PINL,TINL,POUT,TOUT,Q0,
-     &		  N, OFILENAME, LOGFILE
+     &	      PINL,TINL,POUT,TOUT,Q0,
+     &	      N, OFILENAME, LOGFILE

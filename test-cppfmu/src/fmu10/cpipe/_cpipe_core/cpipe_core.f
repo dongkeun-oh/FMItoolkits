@@ -8,22 +8,25 @@ c *
 c *
       Status = 0
       GoOn = .true.
-c *	  
+c *
       call GETINPUT(Status)
-	  if (Status.ne.0) then
-		return
-	  endif
+      if (Status.ne.0) then
+	return
+      endif
 c *	  
       call OPENOFILE(Status)
-	  
-	  do while (Status.eq.0.and.GoOn)
-	     call GETDATA(CurrTime, CurrStep, GoOn, Status)
-		 call DOSTEP(CurrTime, CurrStep, Status)
-		 call SENDDATA(GoOn, Status)
-	  enddo
-	  
-	  CLOSE(OUNIT)
-	  if (LOGUNIT.eq.LOGUNIT0) CLOSE(LOGUNIT)
+c *	  
+      do while (Status.eq.0.and.GoOn)
+         call GETDATA(CurrTime, CurrStep, GoOn, Status)
+	 if (GoOn) then
+	    call DOSTEP(CurrTime, CurrStep, Status)
+	    call SENDDATA(GoOn, Status)
+	 endif
+      enddo  
+c *
+      call IOCLEAR
+      CLOSE(OUNIT)
+      if (LOGUNIT.eq.LOGUNIT0) CLOSE(LOGUNIT)
 c * 	  
       end
 	  
@@ -33,40 +36,41 @@ C ######################################################################
 C ######################################################################
       implicit none
       include 'cpipe_parm.inc'
-	  integer Status
+      integer Status
 c *	  
       character*256 WorkDir
       integer Dummy
 c *	  
-	  call IORDSTR(IFILENAME, Status)
-	  if (Status.eq.0) then
-         call INIT(Status)
-         if (Status.ne.0) then
-            Status = 2
-            write(LOGUNIT,*) 'INIT : error in input file'
-  		 endif
+      call IORDSTR(IFILENAME, Status)
+      if (Status.eq.0) then
+      call INIT(Status)
+      if (Status.ne.0) then
+         Status = 2
+         write(LOGUNIT,*) 'INIT : error in input file'
+      endif
       else
          Status = -1
          write(LOGUNIT,*) 'I/O error in getting filename'
       endif 
 c *	  
-	  call IORDSTR(WorkDir, Status)
-	  if (Status.eq.0) then
+      call IORDSTR(WorkDir, Status)
+      if (Status.eq.0) then
          call ChWorkDir(WorkDir, Status)
          if (Status.ne.0) then
             Status = 2
             write(LOGUNIT,*) 'CHWORKDIR : error in changing directory'
-  		 endif
+         endif
       else
          Status = -1
          write(LOGUNIT,*) 'I/O error in getting work dir. name'
       endif 
 c *	  
       call IOWTINT(Status, Dummy)
-      if (Status.ne.0) call IOCLEAR  
-	  return
+      if (Status.ne.0) call IOCLEAR 
+
+      return
 c *	  
-	  end
+      end
 		
 
 C ######################################################################
@@ -74,30 +78,31 @@ C ######################################################################
 C ######################################################################
       implicit none
       include 'cpipe_parm.inc'
-	  integer Status	  
+      integer Status	  
 c *	  
-	  if (LOGFILE.eq.'.') then 
-	     LOGUNIT = 0
-	  else 
-	     open(LOGUNIT0,file=LOGFILE,action='write',status='replace',
+      if (LOGFILE.eq.'.') then 
+         LOGUNIT = 0
+      else 
+         open(LOGUNIT0,file=LOGFILE,action='write',status='replace',
      &        iostat=Status)
-	     if (status.eq.0) then
-		    LOGUNIT = LOGUNIT0
-	     else
-		    LOGUNIT = 0
-			Status = 0
-	     endif
-	  endif
+         if (status.eq.0) then
+            LOGUNIT = LOGUNIT0
+	 else
+            LOGUNIT = 0
+            Status = 0
+	 endif
+      endif
 c *	  
-	  if (OFILENAME.ne.'.') then
+      if (OFILENAME.ne.'.') then
          open(OUNIT,file=OFILENAME,action='write',status='replace',
      &        iostat=Status)
-	     if (status.ne.0) write(LOGUNIT,*) 
+	 if (status.ne.0) write(LOGUNIT,*) 
      &                   'MAIN : cannot open out file'
-	  else
-	     write(LOGUNIT,*) 'MAIN : out file is not given'
-		 status = -10
-	  endif
+      else
+         write(LOGUNIT,*) 'MAIN : out file is not given'
+         status = -10
+      endif
+c *      
       end
 		
 		
@@ -128,24 +133,24 @@ c * setting default values
       TOUT = 4.5
       Q0 = 1.0
       N = 25   
-	  OFILENAME='.'
-	  LOGFILE='.'
+      OFILENAME='.'
+      LOGFILE='.'
       Status = 0
 c * read input file      
       open(10, FILE=IFILENAME, STATUS='OLD', IOSTAT=Status)
       if (Status.eq.0) then
          read(10, NML=INDATA, IOSTAT=Status)
          if (Status.ne.0) then
-		    write(LOGUNIT,*) "INIT : error reading input file"
-			return
-	     endif
+	    write(LOGUNIT,*) "INIT : error reading input file"
+	    return
+	 endif
          close(10)
       else
          close(10)
          write(LOGUNIT,*) "INIT : cannot open file"
          return
       endif    
-	  OutputTime = TMBEG
+      OutputTime = TMBEG
 c * initialize 1-d flow 
       NM = N + 1
       if (PINL.ge.POUT) then
@@ -179,10 +184,10 @@ c *
       TBIN  = TINL
       TBOUT = TOUT
 	  
-	  MDOTIN = MDOT
-	  MDOTOUT = MDOT
-	  TRIN = T
-	  TROUT = T
+      MDOTIN = MDOT
+      MDOTOUT = MDOT
+      TRIN = T
+      TROUT = T
 c *      
       end
 				
@@ -192,24 +197,24 @@ C ######################################################################
 C ######################################################################
       implicit none
       include 'cpipe_parm.inc'
-	  real*8 CurrTime, CurrStep
-	  logical GoON
-	  integer Status
+      real*8 CurrTime, CurrStep
+      logical GoON
+      integer Status
 c *	  
       integer NTOT
-	  parameter (NTOT = NREAD +2)
+      parameter (NTOT = NREAD +2)
       real*8 RARRAY(NTOT)
 	 
       call IORDDATA(RARRAY, NTOT, Status)
-	  CurrTime = RARRAY(NREAD+1)
-	  CurrStep = RARRAY(NREAD+2)
-	  if (CurrTime.lt.0.or.Status.ne.0) then
-	     GoOn = .false.
-	  else
+      CurrTime = RARRAY(NREAD+1)
+      CurrStep = RARRAY(NREAD+2)
+      if (CurrTime.lt.0.or.Status.ne.0) then
+         GoOn = .false.
+      else
          call SETVARS(RARRAY(1:NREAD))	  
-	  endif
+      endif
 c * 	  
-	  end
+      end
 
 	  
 C ######################################################################
@@ -217,26 +222,26 @@ C ######################################################################
 C ######################################################################
       implicit none
       include 'cpipe_parm.inc'
-	  real*8 CurrTime, CurrStep
-	  logical GoON
-	  integer Status
+      real*8 CurrTime, CurrStep
+      logical GoON
+      integer Status
 c *	  
       integer NTOT
-	  parameter (NTOT = NWRITE +1)
+      parameter (NTOT = NWRITE +1)
       real*8 WARRAY(NTOT)
 c *
-	  if (.not.GoON) then 
-	     WARRAY(NWRITE+1) = -1.
-	  elseif (Status.ne.0) then
-	     WARRAY(NWRITE+1) = -2.
-	  else 
-	     WARRAY(NWRITE+1) = 0.
-	  endif
+      if (.not.GoON) then 
+         WARRAY(NWRITE+1) = -1.
+      elseif (Status.ne.0) then
+         WARRAY(NWRITE+1) = -2.
+      else 
+         WARRAY(NWRITE+1) = 0.
+      endif
 	  
-	  call GETVARS(WARRAY(1:NWRITE))
+      call GETVARS(WARRAY(1:NWRITE))
       call IOWTDATA(WARRAY, NTOT, Status)
 c * 	  
-	  end			
+      end			
       
 
 C ######################################################################
@@ -292,13 +297,13 @@ c *
          return
       endif
 	  
-	  if (Time.gt.OutputTime) then
-	     write(OUNIT,*) "Time = ", Time
-		 do II=1,NM
-		    write(OUNIT,*) LE*(II-1), VEL(II), PRE(II), TEM(II)
-		 enddo
-		 OutputTime = OutputTime + OutStep
-	  endif
+      if (Time.gt.OutputTime) then
+         write(OUNIT,*) "Time = ", Time
+         do II=1,NM
+            write(OUNIT,*) LE*(II-1), VEL(II), PRE(II), TEM(II)
+         enddo
+	 OutputTime = OutputTime + OutStep
+      endif
 c * 	  
       return
       end
@@ -323,7 +328,7 @@ c *
 	  
 	  
 C ######################################################################
-	  subroutine GETVARS(WARRAY)
+      subroutine GETVARS(WARRAY)
 C ###################################################################### 
       implicit none
       include 'cpipe_parm.inc' 

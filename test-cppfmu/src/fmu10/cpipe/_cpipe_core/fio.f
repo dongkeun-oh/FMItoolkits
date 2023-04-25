@@ -2,7 +2,7 @@ C ######################################################################
       subroutine IOWTSTR(Str, Status)
 C ######################################################################
       implicit none
-	  character*(*) Str
+      character*(*) Str
       integer Status
 c *   
       write(6,'(a)', iostat=Status) Str
@@ -13,7 +13,7 @@ C ######################################################################
       subroutine IORDSTR(Str, Status)
 C ######################################################################
       implicit none
-	  character*(*) Str
+      character*(*) Str
       integer Status
 c *    
       read(5, '(a)', iostat=Status) Str
