@@ -47,7 +47,7 @@ add_executable(_cpipe_core "${src}/cpipe_core.f"
 						   "${src}/fio.f" "${src}/cio.c") 
 add_executable(cpipe_test "${src}/cpipe_test.f" 
                           "${src}/solstep.f" "${src}/setmat.f"
-                          "${src}/heprop.f" "${src}/fio.f")
+                          "${src}/heprop.f" "${src}/fio.f")         
 
 target_include_directories(_cpipe_core PRIVATE ${CMAKE_SOURCE_DIR})
 target_include_directories(cpipe_test PRIVATE ${CMAKE_SOURCE_DIR})
@@ -61,7 +61,16 @@ endif()
 set_target_properties(_cpipe_core PROPERTIES LINKER_LANGUAGE Fortran)
 set_target_properties(cpipe_test PROPERTIES LINKER_LANGUAGE Fortran)
 
+add_custom_command(OUTPUT testin
+    POST_BUILD
+    COMMAND "${CMAKE_COMMAND}" "-E" "copy" "${src}/test.in" "${destDir}"
+    COMMAND "${CMAKE_COMMAND}" "-E" "copy" "${src}/test1.in" "${destDir}"
+    COMMAND "${CMAKE_COMMAND}" "-E" "copy" "${src}/test2.in" "${destDir}"
+    DEPENDS _cpipe_core
+    VERBATIM)   
+set_property(SOURCE testin PROPERTY SYMBOLIC TRUE)
+add_custom_target(copy_testin ALL DEPENDS testin)
+  
 install(TARGETS "_cpipe_core" RUNTIME DESTINATION ${destDir})
 install(TARGETS "cpipe_test" RUNTIME DESTINATION ${destDir})
-
 

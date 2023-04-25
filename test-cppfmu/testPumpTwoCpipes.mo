@@ -10,9 +10,9 @@ model testPumpTwoCpipes
     Placement(visible = true, transformation(origin = {-44, 8}, extent = {{10, -10}, {-10, 10}}, rotation = 0)));
   ThermoPower.LHe.Mixer mixer2(V = 2e-6, hstart = 2767.6459, pstart = 5e5)  annotation(
     Placement(visible = true, transformation(origin = {40, 8}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  ThermoPower.LHe.FMU.cpipe cpipe1( debugLogging = false, fmuContentsDir = "D:/Work/FMIToolkits/test-cppfmu/fmu10/release/cpipe", logLevel = 0, numberOfSteps = 40000, stopTime = 100.)  annotation(
+  ThermoPower.LHe.FMU.cpipe cpipe1( cpipe_input = "D:/Work/bin/test1.in",debugLogging = false, fmuContentsDir = "D:/Work/tmp/FMIToolkits/test-cppfmu/fmu10/release/cpipe", logLevel = 0, numberOfSteps = 40000, stopTime = 100.)  annotation(
     Placement(visible = true, transformation(origin = {0, 22}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  ThermoPower.LHe.FMU.cpipe cpipe2(cpipe_input = "D:/Work/FMIToolkits/test-cppfmu/src/fmu10/cpipe/_cpipe_core/test2.in", debugLogging = false, fmuContentsDir = "D:/Work/FMIToolkits/test-cppfmu/fmu10/release/cpipe", logLevel = 0, numberOfSteps = 40000, stopTime = 100.)  annotation(
+  ThermoPower.LHe.FMU.cpipe cpipe2(cpipe_input = "D:/Work/bin/test2.in", debugLogging = false, fmuContentsDir = "D:/Work/tmp/FMIToolkits/test-cppfmu/fmu10/release/cpipe", logLevel = 0, numberOfSteps = 40000, stopTime = 100.)  annotation(
     Placement(visible = true, transformation(origin = {0, -8}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 equation
   connect(cpipe2.infl, mixer1.in2) annotation(
